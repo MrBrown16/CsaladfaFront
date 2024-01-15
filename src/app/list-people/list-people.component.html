@@ -1,1 +1,4 @@
-<p>list-people works!</p>
+{{peopleList|json}}
+<ng-container *ngFor="let person of peopleList">
+  <button (click)="editPerson(person)"></button>
+</ng-container>

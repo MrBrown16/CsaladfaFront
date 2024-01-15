@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { BaseService } from '../base.service';
 import { ActivatedRoute } from '@angular/router';
-import { PersonNoId } from '../PersonNoId';
-import { Column } from '../column';
+import { Column } from '../Column';
+import { Person } from '../Person';
 
 @Component({
   selector: 'app-new-person',
@@ -10,19 +10,29 @@ import { Column } from '../column';
   styleUrls: ['./new-person.component.css']
 })
 export class NewPersonComponent {
-  person:any
-  selectedId:any = null
+  person:Person
+  selectedId:number | null  = null
   childCol:Array<Column>
   columns:Array<Column>
-
+  sex:Array<Column>
+  sexVal:boolean=false
 
   constructor(private base:BaseService, private route: ActivatedRoute) {
     this.columns =base.getColumns()
     this.childCol =base.getChildCols()
+    this.sex =base.getSex()
+    // this.person = this.base.getPerson(this.selectedId)
+    this.person = this.base.getChoosenPerson()
+
   }
 
   ngOnInit() {
-    this.selectedId = this.route.snapshot.paramMap.get('id')
-      this.person = this.base.getPersonById(this.selectedId)
+    // this.person = this.base.getPerson(this.selectedId)
+    this.person = this.base.getChoosenPerson()
+    // if (this.selectedId!=null) {
+    //   this.person = this.base.getPerson(this.selectedId)
+
+    // }
+      // this.person = this.base.getPersonById(this.selectedId)
   }
 }

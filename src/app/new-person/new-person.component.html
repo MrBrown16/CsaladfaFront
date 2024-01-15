@@ -1,32 +1,30 @@
 {{selectedId}}
 {{person|json}}
-<!-- 
+<!-- {{peopleList|json}} -->
 <div class="container">
     <div class="person row">
         <ng-container *ngFor="let col of columns">
-            <ng-container [ngSwitch]="col.type">
-                <ng-template *ngSwitchCase="'text'">
-                    
-                    <input  type="text">
-                    
-                </ng-template>
-            </ng-container>
-
-        </ng-container>
-    </div>
-</div> -->
-
-<div class="container">
-    <div class="person row">
-        <ng-container *ngFor="let col of columns">
-            <ng-container [ngSwitch]="col.type">
-                <ng-container *ngSwitchCase="'text'">
+            <ng-container [ngSwitch]="col.key">
+                <ng-container *ngSwitchCase="'id'">
+                  <ng-container *ngIf="person.id != null">
                     <label>{{ col.text }}</label>
-                    <input [type]="col.type" >
+                    <input disabled type="text" >
+                  </ng-container>
+                </ng-container>
+                <ng-container *ngSwitchCase="'name'">
+
+                    <label>{{ col.text }}</label>
+                    <input type="text" >
+
                 </ng-container>
                 <ng-container *ngSwitchCase="'radio'">
                     <label>{{ col.text }}</label>
                     <!-- Implement radio button logic here -->
+                    <mat-radio-group class="sex" [(ngModel)]="person.sex">
+                      <mat-radio-button class="sex" *ngFor="let sexopt of sex" [value]="sexopt.key">
+                        {{sexopt.text}}
+                      </mat-radio-button>
+                    </mat-radio-group>
                 </ng-container>
                 <ng-container *ngSwitchCase="'date'">
                     <label>{{ col.text }}</label>
@@ -45,3 +43,4 @@
         </ng-container>
     </div>
 </div>
+

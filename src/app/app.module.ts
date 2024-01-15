@@ -8,20 +8,24 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { NewPersonComponent } from './new-person/new-person.component';
 import { ListPeopleComponent } from './list-people/list-people.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [
     AppComponent,
     NewPersonComponent,
     ListPeopleComponent,
-    
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    HttpClientModule, 
+    HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

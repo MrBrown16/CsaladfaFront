@@ -2,25 +2,26 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject, find } from 'rxjs';
 import { Router } from '@angular/router';
-import { PersonWithId } from './PersonWithId';
-import { PersonNoId } from './PersonNoId';
-import { Column } from './column';
+import { Person } from './Person';
+import { Column } from './Column';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BaseService {
-  
-  private url="http://localhost:8080/person/"  
-  
+  chosenPerson: Person;
+
+
+  private url="http://localhost:8080/person/"
+
   private peopleList= new BehaviorSubject<any>([])
-  
+
   private childCol:Array<Column>=[
     {key:"id", text:"Id", type:"plain"},
     {key:"name", text:"Név", type:"text"},
   ]
-  // {key:"id", text:"Id", type:"plain"},
   private columns:Array<Column>=[
+    {key:"id", text:"Id", type:"plain"},
     {key:"name", text:"Név", type:"text"},
     {key:"sex", text:"Nem", type:"radio"},
     {key:"birthDate", text:"Születési Dátum", type:"date"},
@@ -37,47 +38,43 @@ export class BaseService {
     {key:"delete", text:"Töröl", type:"button"},
     {key:"edit", text:"Módosít", type:"button"}
   ]
+  private sex:Array<Column>=[
+    {key:false, text:"Férfi", type:"radio"},
+    {key:true, text:"Nő", type:"radio"}
+  ]
 
 
 
-  constructor(private http:HttpClient, private router:Router) { 
+  constructor(private http:HttpClient, private router:Router) {
     this.loadPeople()
+    this.getPerson(1)
+    this.chosenPerson= new Person()
   }
 
   private loadPeople(){
-    return this.http.get(this.url,).subscribe({
+    return this.http.get(this.url+"firstfifty").subscribe({
       next:(res)=>{
         this.peopleList.next(res)
       },
       error:(err)=>console.log("Error in get ",err),
     })
   }
-  getPeople(){
-    return this.peopleList
-  }
-  getColumns(){
-    return this.columns
-  }
-  getOptionCols(){
-    return this.optionCols
-  }
-  getChildCols(){
-    return this.childCol
-  }
-  getPersonById(id:number){
-    let person;
-    this.peopleList.subscribe((res)=>{
-      res.find((pers:any)=>{
-       if (pers.id===id) {
-         person= pers
-       }else{
-        person= new PersonNoId()
-       }
-    })})
-    return person;
-  }
-  
-  postPerson(body:PersonNoId){
+  // getPersonById(id:number):Person{
+  //   let person = new Person();
+  //   this.peopleList.subscribe((res)=>{
+  //     res.find((pers:Person)=>{
+  //       if (pers.id==id) {
+  //        person= pers
+  //        console.log("person match")
+  //       }else{
+  //         console.log("no match for id "+id+" : "+pers.id)
+  //       }
+  //       return person
+  //     })})
+  //     return person;
+  //   }
+
+  postPerson(body:Person){
     this.http.post(this.url+"create",body).subscribe({
       next:(res)=>{
         console.log("successfull post")
@@ -88,16 +85,35 @@ export class BaseService {
     })
   }
   getPerson(id:number){
-    this.http.get(this.url+id).subscribe({
-      next:(res)=>{
-        console.log("successfull get" + res)
-        this.router.navigate(["/list-people"])
-      },
-      error:(err)=>console.log("Error in put ",err)
+    return this.http.get(this.url+id).subscribe((res:Object)=>{
+      // this.peopleList.next(Array.of(res))
+      console.log("successfull get" + res)
+      return res
+      // this.router.navigate(["/list-people"])
     })
   }
-  putPerson(id:number,body:PersonWithId){
-    this.http.put(this.url+"create/"+id,body).subscribe({
+  // getPerson(id:number){
+    //   let person:Person;
+    //   this.http.get(this.url+id).subscribe({
+      //     next:(res)=>{
+        //       // this.peopleList.next(Array.of(res))
+        //       console.log("successfull get" + res)
+        //       person = res
+        //       // this.router.navigate(["/list-people"])
+        //     },
+        //     error:(err)=>console.log("Error in getPerson ",err)
+        //   })
+  //   if (person) {
+    //     console.log(person)
+    //     return person
+    //   }
+    //   console.log(person)
+    //   console.log("first return doesn't work")
+    //   return new Person()
+    // }
+
+    putPerson(id:number,body:Person){
+      this.http.put(this.url+"create/"+id,body).subscribe({
       next:(res)=>{
         console.log("successfull put")
         this.loadPeople()
@@ -117,6 +133,39 @@ export class BaseService {
       error:(err)=>console.log("Error in del ",err)
     })
   }
+
+
+
+
+  setChosenPerson(person : Person) {
+    this.chosenPerson = person
+  }
+
+
+
+
+
+
+  getChoosenPerson(){
+    return this.chosenPerson
+  }
+  getPeople(){
+    return this.peopleList
+  }
+  getColumns(){
+    return this.columns
+  }
+  getOptionCols(){
+    return this.optionCols
+  }
+  getChildCols(){
+    return this.childCol
+  }
+  getSex(){
+    return this.sex
+  }
+
+
 
 
 }

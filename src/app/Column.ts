@@ -1,5 +1,5 @@
 export interface Column{
-    key:string
+    key:string | boolean
     text:string
     type:string
 }
