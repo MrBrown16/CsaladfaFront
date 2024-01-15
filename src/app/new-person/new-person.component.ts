@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { BaseService } from '../base.service';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs';
+import { PersonNoId } from '../PersonNoId';
+import { Column } from '../column';
 
 @Component({
   selector: 'app-new-person',
@@ -11,18 +12,17 @@ import { switchMap } from 'rxjs';
 export class NewPersonComponent {
   person:any
   selectedId:any = null
+  childCol:Array<Column>
+  columns:Array<Column>
 
 
-  constructor(private base:BaseService, private route: ActivatedRoute) {}
+  constructor(private base:BaseService, private route: ActivatedRoute) {
+    this.columns =base.getColumns()
+    this.childCol =base.getChildCols()
+  }
 
   ngOnInit() {
-    this.person = this.route.paramMap.pipe(
-      switchMap(params => {
-        if (params.get('id')!=null) {
-          this.selectedId = parseInt(params.get('id')!, 10);
-          return this.base.getPersonById(this.selectedId);
-        }
-      })
-    );
+    this.selectedId = this.route.snapshot.paramMap.get('id')
+      this.person = this.base.getPersonById(this.selectedId)
   }
 }

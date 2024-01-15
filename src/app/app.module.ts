@@ -13,14 +13,15 @@ import { ListPeopleComponent } from './list-people/list-people.component';
   declarations: [
     AppComponent,
     NewPersonComponent,
-    ListPeopleComponent
+    ListPeopleComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     HttpClientModule, 
-    FormsModule
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

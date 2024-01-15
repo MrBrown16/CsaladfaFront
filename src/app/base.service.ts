@@ -4,6 +4,7 @@ import { BehaviorSubject, Subject, find } from 'rxjs';
 import { Router } from '@angular/router';
 import { PersonWithId } from './PersonWithId';
 import { PersonNoId } from './PersonNoId';
+import { Column } from './column';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,14 @@ export class BaseService {
   
   private peopleList= new BehaviorSubject<any>([])
   
-  private childCol:Array<Object>=[
+  private childCol:Array<Column>=[
     {key:"id", text:"Id", type:"plain"},
     {key:"name", text:"Név", type:"text"},
   ]
-  private columns:Array<Object>=[
-    {key:"id", text:"Id", type:"plain"},
+  // {key:"id", text:"Id", type:"plain"},
+  private columns:Array<Column>=[
     {key:"name", text:"Név", type:"text"},
-    {key:"sex", text:"Nem", type:"boolean"},
+    {key:"sex", text:"Nem", type:"radio"},
     {key:"birthDate", text:"Születési Dátum", type:"date"},
     {key:"birthLocation", text:"Születési hely", type:"text"},
     {key:"motherId", text:"Anyja Azonosítója", type:"number"},
@@ -32,7 +33,7 @@ export class BaseService {
     {key:"deathLocation", text:"Halálozási hely", type:"text"},
     {key:"children", text:"Gyermekei", type:"list"},
   ]
-  private optionCols:Array<Object>=[
+  private optionCols:Array<Column>=[
     {key:"delete", text:"Töröl", type:"button"},
     {key:"edit", text:"Módosít", type:"button"}
   ]
@@ -64,14 +65,16 @@ export class BaseService {
     return this.childCol
   }
   getPersonById(id:number){
-     return this.peopleList.subscribe((res)=>{
-     return res.find((pers:any)=>{
+    let person;
+    this.peopleList.subscribe((res)=>{
+      res.find((pers:any)=>{
        if (pers.id===id) {
-         return pers 
+         person= pers
        }else{
-        return new PersonNoId()
+        person= new PersonNoId()
        }
     })})
+    return person;
   }
   
   postPerson(body:PersonNoId){

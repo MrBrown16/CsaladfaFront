@@ -1,1 +1,47 @@
-<p>new-person works!</p>
+{{selectedId}}
+{{person|json}}
+<!-- 
+<div class="container">
+    <div class="person row">
+        <ng-container *ngFor="let col of columns">
+            <ng-container [ngSwitch]="col.type">
+                <ng-template *ngSwitchCase="'text'">
+                    
+                    <input  type="text">
+                    
+                </ng-template>
+            </ng-container>
+
+        </ng-container>
+    </div>
+</div> -->
+
+<div class="container">
+    <div class="person row">
+        <ng-container *ngFor="let col of columns">
+            <ng-container [ngSwitch]="col.type">
+                <ng-container *ngSwitchCase="'text'">
+                    <label>{{ col.text }}</label>
+                    <input [type]="col.type" >
+                </ng-container>
+                <ng-container *ngSwitchCase="'radio'">
+                    <label>{{ col.text }}</label>
+                    <!-- Implement radio button logic here -->
+                </ng-container>
+                <ng-container *ngSwitchCase="'date'">
+                    <label>{{ col.text }}</label>
+                    <input [type]="col.type" >
+                </ng-container>
+                <ng-container *ngSwitchCase="'number'">
+                    <label>{{ col.text }}</label>
+                    <input [type]="col.type" >
+                </ng-container>
+                <ng-container *ngSwitchCase="'list'">
+                    <label>{{ col.text }}</label>
+                    <!-- Implement list logic here -->
+                </ng-container>
+                <!-- Add more ngSwitchCase blocks for other types as needed -->
+            </ng-container>
+        </ng-container>
+    </div>
+</div>
