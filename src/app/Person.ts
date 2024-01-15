@@ -1,6 +1,7 @@
 export class Person {
+    [x: string]: any
 
-    "id": number|null
+    "id": number
     "name": string
     "sex": boolean
     "birthDate": string
@@ -11,10 +12,10 @@ export class Person {
     "fatherName": string
     "deathDate": string
     "deathLocation": string
-    "children": [{"id":number, "name":string}] |[]
+    "children": {id:number, name:string}[] |[]
 
     constructor(){
-      this.id=null
+      this.id=0
       this.name =""
       this.sex=false
       this.birthDate=""

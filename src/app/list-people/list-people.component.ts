@@ -20,7 +20,8 @@ export class ListPeopleComponent {
     this.childCols=base.getChildCols()
     this.optionCols=base.getOptionCols()
     base.getPeople().subscribe((res:Array<Person>)=> {
-      this.peopleList=res
+      
+      this.peopleList = res
     })
   }
 
@@ -29,7 +30,7 @@ export class ListPeopleComponent {
   }
   editPerson(person :Person){
     this.base.setChosenPerson(person)
-    this.router.navigate(["/edit"])
+    this.router.navigate(["/edit",person.id])
   }
 
 }

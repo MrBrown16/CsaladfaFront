@@ -1,33 +1,21 @@
 {{selectedId}}
 {{person|json}}
-<!-- {{peopleList|json}} -->
-{key:"id", text:"Id", type:"plain"},
-{key:"name", text:"Név", type:"text"},
-{key:"sex", text:"Nem", type:"radio"},
-{key:"birthDate", text:"Születési Dátum", type:"date"},
-{key:"birthLocation", text:"Születési hely", type:"text"},
-{key:"motherId", text:"Anyja Azonosítója", type:"number"},
-{key:"motherName", text:"Anyja Neve", type:"text"},
-{key:"fatherId", text:"Apja Azonosítója", type:"number"},
-{key:"fatherName", text:"Apja Neve", type:"text"},
-{key:"deathDate", text:"Halálozási Dátum", type:"date"},
-{key:"deathLocation", text:"Halálozási hely", type:"text"},
-{key:"children", text:"Gyermekei", type:"list"},
 <div class="container">
     <div class="person row">
         <ng-container *ngFor="let col of columns">
+            <!-- {{col|json}} -->
             <ng-container [ngSwitch]="col.key">
 
                 <ng-container *ngSwitchCase="'id'">
-                  <ng-container *ngIf="person.id != null">
+                  <ng-container *ngIf="person != null && person.id > 0">
                     <label>{{ col.text }}</label>
-                    <input disabled type="text" >
+                    <input disabled [type]="col.type" [(ngModel)]="person.id" >
                   </ng-container>
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'name'">
                     <label>{{ col.text }}</label>
-                    <input type="text" >
+                    <input [type]="col.type"  [(ngModel)]="person.name" >
                 </ng-container>
 
                 <ng-container *ngSwitchCase="'sex'">
@@ -41,41 +29,63 @@
 
                 <ng-container *ngSwitchCase="'birthDate'">
                     <label>{{ col.text }}</label>
-                    <input [type]="col.type" >
+                    <input [type]="col.type"  [(ngModel)]="person.birthDate" >
                 </ng-container>
+
                 <ng-container *ngSwitchCase="'birthLocation'">
                     <label>{{ col.text }}</label>
-                    <input [type]="col.type" >
+                    <input [type]="col.type"  [(ngModel)]="person.birthLocation" >
                 </ng-container>
+                
                 <ng-container *ngSwitchCase="'motherId'">
                     <label>{{ col.text }}</label>
-                    <input [type]="col.type" >
+                    <input [type]="col.type"  [(ngModel)]="person.motherId" >
                 </ng-container>
+                
                 <ng-container *ngSwitchCase="'motherName'">
                     <label>{{ col.text }}</label>
-                    <input [type]="col.type" >
+                    <input [type]="col.type"  [(ngModel)]="person.motherName" >
                 </ng-container>
+                
                 <ng-container *ngSwitchCase="'fatherId'">
                     <label>{{ col.text }}</label>
-                    <input [type]="col.type" >
+                    <input [type]="col.type"  [(ngModel)]="person.fatherId" >
                 </ng-container>
+                
                 <ng-container *ngSwitchCase="'fatherName'">
                     <label>{{ col.text }}</label>
-                    <input [type]="col.type" >
+                    <input [type]="col.type"  [(ngModel)]="person.fatherName" >
                 </ng-container>
+                
                 <ng-container *ngSwitchCase="'deathDate'">
                     <label>{{ col.text }}</label>
-                    <input [type]="col.type" >
+                    <input [type]="col.type"  [(ngModel)]="person.deathDate" >
                 </ng-container>
+                
                 <ng-container *ngSwitchCase="'deathLocation'">
                     <label>{{ col.text }}</label>
-                    <input [type]="col.type" >
+                    <input [type]="col.type"  [(ngModel)]="person.deathLocation" >
                 </ng-container>
+                
                 <ng-container *ngSwitchCase="'list'">
                     <label>{{ col.text }}</label>
                     <!-- Implement list logic here -->
+                    <ng-container *ngIf="person.children && person.children.length > 0">
+
+                        <div *ngFor="let child of castToChildType(person.children)" >
+                            <label>Azonosítója</label>
+                            <input type="number" [(ngModel)]="child.id" >
+                            <label>Neve</label>
+                            <input type="text" [(ngModel)]="child.name">
+                        </div>
+                    </ng-container>
+                    <button type="button" (click)="newKid()" class="btn btn-success">Új gyerek bevitele</button>
+
                 </ng-container>
+
+
                 <!-- Add more ngSwitchCase blocks for other types as needed -->
+
             </ng-container>
         </ng-container>
     </div>

@@ -1,4 +1,4 @@
 {{peopleList|json}}
 <ng-container *ngFor="let person of peopleList">
-  <button (click)="editPerson(person)"></button>
+  <button (click)="editPerson(person)">{{person.name}}</button>
 </ng-container>
