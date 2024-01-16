@@ -7,6 +7,7 @@ const routes: Routes = [
   {path:"list-people", component:ListPeopleComponent},
   {path:"edit/:id", component:NewPersonComponent},
   {path:"edit", component:NewPersonComponent},
+  {path:"", component:ListPeopleComponent},
 ];
 
 @NgModule({

@@ -16,6 +16,7 @@ export class NewPersonComponent {
   columns:Array<Column>
   sex:Array<Column>
   sexVal:boolean=false
+  id:number =0
 
   constructor(private base:BaseService, private route: ActivatedRoute) {
     this.columns =base.getColumns()
@@ -28,19 +29,19 @@ export class NewPersonComponent {
   ngOnInit() {
     this.route.params.subscribe(params => {
       if (params['id'] && params['id']!=undefined && params['id']!=null) {
-        const id = +params['id']; 
+        this.id = +params['id'];
         console.log("there is an id")
-        if (isNaN(id)) {
+        if (isNaN(this.id)) {
           console.log("id not a number")
           this.person = this.base.ifEmptyThenNull(new Person())
         }else{
           console.log("id is a number")
-          this.loadPersonById(id);
+          this.loadPersonById(this.id);
           this.base.setChosenPerson(this.person)
         }
       } else {
         console.log("there is NO id")
-        
+
         // Handle the case when 'id' parameter is not present
         this.person = this.base.getChoosenPerson()
       }
@@ -65,5 +66,21 @@ export class NewPersonComponent {
 
   castToChildType(children: any): { id: number; name: string }[] {
     return children as { id: number; name: string }[];
+  }
+  zeroForId(child:any){
+    child.id = 0
+  }
+
+  save(person:Person){
+    if (person.id==0 && this.id==0) {
+      this.base.postPerson(person)
+    }else{
+      this.base.putPerson(this.id,person)
+    }
+  }
+  deleteP(id:number){
+    if (id!=null && id != 0) {
+      this.base.delPerson(id)
+    }
   }
 }

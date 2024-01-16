@@ -58,9 +58,10 @@ export class BaseService {
         });
         this.peopleList.next(processedPeople);
       })
-  }
+    }
 
-  postPerson(body: Person) {
+    postPerson(body: Person) {
+    console.log(body, "post")
     this.http.post(this.url + "create", this.ifEmptyThenNull(body)).subscribe({
       next: (res) => {
         console.log("successfull post")
@@ -86,9 +87,10 @@ export class BaseService {
   }
 
   putPerson(id: number, body: Person) {
-    this.http.put(this.url + "create/" + id, this.ifEmptyThenNull(body)).subscribe({
+    console.log(id,body, "put")
+    this.http.put(this.url + "update/" + id, this.ifEmptyThenNull(body)).subscribe({
       next: (res) => {
-        console.log("successfull put")
+        console.log("successfull put"+ res)
         // this.loadPeople()
         this.router.navigate(["/list-people"])
       },
@@ -174,5 +176,5 @@ export class BaseService {
 
     return result;
   }
-}  
+}
 
