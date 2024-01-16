@@ -1,4 +1,57 @@
-{{peopleList|json}}
+<!-- {{peopleList|json}}
 <ng-container *ngFor="let person of peopleList">
   <button (click)="editPerson(person)">{{person.name}}</button>
-</ng-container>
+</ng-container> -->
+
+<div class="container">
+  <div class="row myheader">
+    <ng-container  *ngFor="let col of columns">
+      <div [style.width]="col.size + '%'" [ngSwitch]="col.key">
+        <ng-container *ngSwitchCase="'deathDate'">
+          <div *ngIf="showDeathInfo">{{ col.text }}</div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'deathLocation'">
+          <div *ngIf="showDeathInfo">{{ col.text }}</div>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          {{ col.text }}
+        </ng-container>
+      </div>
+    </ng-container>
+    <div class="col-2">
+      <!-- <button type="button" (click)="showDeathInfo = !showDeathInfo" class="btn btn-warning">Halál mutatása</button> -->
+      <!-- page structure change is not achieved, feature disabled -->
+    </div>
+  </div>
+
+  <div class="row" *ngFor="let person of peopleList">
+    
+    <ng-container *ngFor="let col of columns">
+      <ng-container class="column" [ngSwitch]="col.key">
+        <div [style.width]="col.size + '%'" *ngSwitchCase="'name'">
+          <div [ngClass]="{ 'highlight-red': isDeathDateInPast(person) }">{{ person[col.key] }}</div>
+        </div>
+        <div [style.width]="col.size + '%'" *ngSwitchCase="'deathDate'">
+          <div *ngIf="showDeathInfo">{{ person[col.key] }}</div>
+        </div>
+        <div [style.width]="col.size + '%'" *ngSwitchCase="'deathLocation'">
+          <div *ngIf="showDeathInfo">{{ person[col.key] }}</div>
+        </div>
+        <div [style.width]="col.size + '%'" *ngSwitchCase="'children'">
+          <div class="child">
+            <select *ngIf="person.children.length > 0">
+              <option *ngFor="let child of person.children" [value]="child.id">{{ child.name }}</option>
+            </select>
+          </div>
+        </div>
+        <div [style.width]="col.size + '%'" *ngSwitchDefault>
+          {{ person[col.key] }}
+        </div>
+      </ng-container>
+    </ng-container>
+    <div class="buttons">
+      <button type="button" (click)="editPerson(person)" class="btn btn-success">Mentés</button>
+      <button type="button" (click)="deletePerson(person.id)" class="btn btn-danger">Töröl</button>
+    </div>
+  </div>
+</div>

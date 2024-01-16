@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { NewPersonComponent } from './new-person/new-person.component';
 import { ListPeopleComponent } from './list-people/list-people.component';
@@ -25,7 +25,8 @@ import { MatRadioModule } from '@angular/material/radio';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    MatRadioModule
+    MatRadioModule,
+    NgbTypeaheadModule
   ],
   providers: [],
   bootstrap: [AppComponent]

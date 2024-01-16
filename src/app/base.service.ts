@@ -17,30 +17,30 @@ export class BaseService {
   private peopleList = new BehaviorSubject<Array<Person>>([new Person()])
 
   private childCol: Array<Column> = [
-    { key: "id", text: "Id", type: "plain" },
-    { key: "name", text: "Név", type: "text" },
+    { key: "id", text: "Id", type: "plain", size:50},
+    { key: "name", text: "Név", type: "text", size:50},
   ]
   private columns: Array<Column> = [
-    { key: "id", text: "Id", type: "number" },
-    { key: "name", text: "Név", type: "text" },
-    { key: "sex", text: "Nem", type: "radio" },
-    { key: "birthDate", text: "Születési Dátum", type: "date" },
-    { key: "birthLocation", text: "Születési hely", type: "text" },
-    { key: "motherId", text: "Anyja Azonosítója", type: "number" },
-    { key: "motherName", text: "Anyja Neve", type: "text" },
-    { key: "fatherId", text: "Apja Azonosítója", type: "number" },
-    { key: "fatherName", text: "Apja Neve", type: "text" },
-    { key: "deathDate", text: "Halálozási Dátum", type: "date" },
-    { key: "deathLocation", text: "Halálozási hely", type: "text" },
-    { key: "children", text: "Gyermekei", type: "list" },
+    { key: "id", text: "Id", type: "number" , size:3},
+    { key: "name", text: "Név", type: "text" , size:10},
+    { key: "sex", text: "Nem", type: "radio" , size:5},
+    { key: "birthDate", text: "Születési Dátum", type: "date" , size:9},
+    { key: "birthLocation", text: "Születési hely", type: "text" , size:8},
+    { key: "motherId", text: "Anyja Azonosítója", type: "number" , size:7},
+    { key: "motherName", text: "Anyja Neve", type: "text" , size:8},
+    { key: "fatherId", text: "Apja Azonosítója", type: "number" , size:7},
+    { key: "fatherName", text: "Apja Neve", type: "text" , size:8},
+    { key: "deathDate", text: "Halálozási Dátum", type: "date" , size:9},
+    { key: "deathLocation", text: "Halálozási hely", type: "text" , size:7},
+    { key: "children", text: "Gyermekei", type: "list" , size:11},
   ]
   private optionCols: Array<Column> = [
-    { key: "delete", text: "Töröl", type: "button" },
-    { key: "edit", text: "Módosít", type: "button" }
+    { key: "delete", text: "Töröl", type: "button", size:50 },
+    { key: "edit", text: "Módosít", type: "button", size:50}
   ]
   private sex: Array<Column> = [
-    { key: "false", text: "Férfi", type: "radio" },
-    { key: "true", text: "Nő", type: "radio" }
+    { key: "false", text: "Férfi", type: "radio", size:50},
+    { key: "true", text: "Nő", type: "radio" , size:50}
   ]
 
   constructor(private http: HttpClient, private router: Router) {
@@ -65,7 +65,7 @@ export class BaseService {
     this.http.post(this.url + "create", this.ifEmptyThenNull(body)).subscribe({
       next: (res) => {
         console.log("successfull post")
-        // this.loadPeople()
+        this.loadPeople()
         this.router.navigate(["/list-people"])
       },
       error: (err) => console.log("Error in post ", err)
@@ -85,13 +85,26 @@ export class BaseService {
       })
     );
   }
+  getPersonByName(name:string): Observable<Array<{id:number;name:string;sex:boolean}>> {
+    console.log(name)
+    return this.http.get<{id:number;name:string;sex:boolean}[]>((this.url+"reference/"+name)).pipe(
+      map((res:{id:number;name:string; sex:boolean}[]) => {
+        console.log('Successfully got person:', res);
+        return res;
+      }),
+      catchError((error) => {
+        console.error('Error in getPersonByName:', error);
+        return throwError(() => error); // Pass a factory function to throwError
+      })
+    );
+  }
 
   putPerson(id: number, body: Person) {
     console.log(id,body, "put")
     this.http.put(this.url + "update/" + id, this.ifEmptyThenNull(body)).subscribe({
       next: (res) => {
         console.log("successfull put"+ res)
-        // this.loadPeople()
+        this.loadPeople()
         this.router.navigate(["/list-people"])
       },
       error: (err) => console.log("Error in put ", err)
@@ -101,8 +114,8 @@ export class BaseService {
   delPerson(id: number) {
     this.http.delete(this.url + "del/" + id).subscribe({
       next: (res) => {
-        console.log("successfull del")
-        // this.loadPeople()
+        console.log("successfull del"+res)
+        this.loadPeople()
         this.router.navigate(["/list-people"])
       },
       error: (err) => console.log("Error in del ", err)
@@ -116,7 +129,10 @@ export class BaseService {
   getChoosenPerson() {
     return this.chosenPerson
   }
-  getPeople() {
+  getPeople(reload:boolean) {
+    if (reload) {
+      this.loadPeople()
+    }
     return this.peopleList
   }
   getColumns() {
